@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Prova - Grupos de Futebol </title>
+
+    <style>
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            padding: 40px 20px;
+            background-color: #f4f7f6; 
+            color: #333;
+            margin: 0;
+        }
+
+        
+        h1 { 
+            text-align: center; 
+            color: #2c3e50;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; 
+        }
+
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            border-left: 5px solid #3498db; 
+        }
+
+        h2 { 
+            margin-top: 0;
+            color: #2980b9;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px; 
+        }
+
+        li {
+            background: #ecf0f1;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        details {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button { 
+            padding: 12px 30px; 
+            cursor: pointer; 
+            background: #27ae60; 
+            color: white; 
+            border: none; 
+            border-radius: 25px; 
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover { 
+            transform: scale(1.05);
+            background: #219150; 
+        }
+    </style>
+</head>    
+
+<body>
+
+    <h1> Grupos e Fatos </h1>
+
+    <div class="container">
+        <div class="card">
+            <h2 id="g1-titulo"> Grupo A </h2>
+            <h3> Seleções </h3>
+            <ul id="g1-lista">
+                <li> México </li>
+                <li> África do Sul </li>
+                <li> Coreia do Sul </li>
+                <li> República Tcheca </li>
+            </ul>
+            <details id="g1-fatos"> Fatos: O jogo de abertura será México x África do Sul. Confrontos entre Coreia do Sul e seleções europeias já ocorreram em várias Copas, com histórico equilibrado.</details>
+        </div>
+
+        <div class="card">
+            <h2 id="g2-titulo"> Grupo B </h2>
+            <h3> Seleções </h3>
+            <ul id="g2-lista">
+                <li> Canadá </li>
+                <li> Suíça </li>
+                <li> Catar </li>
+                <li> Bósnia </li>
+            </ul>
+            <details id="g2-fatos"> Fatos: O Canadá joga em casa, fator importante de desempenho. Catar e Suíça já se enfrentaram recentemente em amistosos internacionais.</details>
+        </div>
+
+        <div class="card">
+            <h2 id="g3-titulo"> Grupo C </h2>
+            <h3> Seleções </h3>
+            <ul id="g3-lista">
+                <li> Brasil </li>
+                <li> Marrocos </li>
+                <li> Haiti </li>
+                <li> Escócia </li>
+            </ul>
+            <details id="g3-fatos"> Fatos: Brasil, Marrocos e Escócia já dividiram grupo em 1998. Brasil nunca perdeu para a Escócia em Copas.</details>
+        </div>
+
+        <div class="btn-container">
+            <button onclick="troca()"> Próximo </button>
+        </div>
+    </div>
+
+    <script>
+        function troca() {
+            
+            document.getElementById('g1-titulo').textContent = "Grupo 🅳";
+            const itensG1 = document.getElementById('g1-lista').getElementsByTagName('li');
+            const paisesD = ["Estados Unidos", "Paraguai", "Austrália", "Turquia"];
+            for(let i=0; i<4; i++) { itensG1[i].textContent = paisesD[i]; }
+            document.getElementById('g1-fatos').textContent = "Fatos: Os EUA jogam em casa, vantagem histórica em Copas. Austrália enfrenta frequentemente seleções sul-americanas em torneios.";
+
+            
+            document.getElementById('g2-titulo').textContent = "Grupo 🅴";
+            const itensG2 = document.getElementById('g2-lista').getElementsByTagName('li');
+            const paisesE = ["Alemanha", "Equador", "Costa do Marfim", "Curaçao"];
+            for(let i=0; i<4; i++) { itensG2[i].textContent = paisesE[i]; }
+            document.getElementById('g2-fatos').textContent = "Fatos: Alemanha costuma dominar fases de grupos. Equador e Costa do Marfim têm estilos físicos semelhantes.";
+
+            
+            document.getElementById('g3-titulo').textContent = "Grupo 🅵";
+            const itensG3 = document.getElementById('g3-lista').getElementsByTagName('li');
+            const paisesF = ["Holanda", "Japão", "Tunísia", "Suécia"];
+            for(let i=0; i<4; i++) { itensG3[i].textContent = paisesF[i]; }
+            document.getElementById('g3-fatos').textContent = "Fatos: Brasil, Marrocos e Escócia já dividiram grupo em 1998. Brasil nunca perdeu para a Escócia em Copas.";
+        }
+    </script>
+</body>    
+</html>
