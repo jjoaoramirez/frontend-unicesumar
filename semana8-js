@@ -5,8 +5,17 @@ function addTask() {
   const temTexto = textInput.value.trim();
   if (temTexto != '') {
     const taskToAdd = document.createElement('li');
-    taskToAdd.innerHTML = `<span> ${temTexto} </span>`;
+    taskToAdd.innerHTML = `<span> ${temTexto} </span> <button onclick="editar(this)"> Editar </button> <button onclick="remover(this)"> Remover </button> <button onclick="concluir(this)"> Concluir </button>`;
     taskList.appendChild(taskToAdd); 
-    
   }
+}
+
+function remover(button) {
+  const itemToRemove = button.parentElement;
+  taskList.removeChild(itemToRemove);
+}
+
+function concluir(button) {
+  const itemConcluded = button.parentElement;
+  itemConcluded.classList = 'completed';
 }
