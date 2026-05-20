@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Orçamento de Evento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .app {
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        select, input {
+            width: 80%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 8px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #555;
+            color: #fff;
+        }
+
+        button:hover { background-color: #333; }
+
+        #resumo {
+            margin-top: 15px;
+            text-align: left;
+            font-size: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+        }
+
+        #resumo p { margin: 6px 0; }
+
+        .destaque { font-weight: bold; font-size: 16px; }
+        .desconto { color: green; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <h2>Orçamento de Evento</h2>
+
+        <select id="pacote">
+            <option value="50">Standard — R$ 50,00/pessoa</option>
+            <option value="80">Premium — R$ 80,00/pessoa</option>
+            <option value="120">Infinity Deluxe — R$ 120,00/pessoa</option>
+        </select>
+
+        <input type="number" id="pessoas" placeholder="Quantidade de pessoas" min="1">
+
+        <br>
+        <button id="btnCalcular">Calcular Orçamento</button>
+
+        <div id="resumo"></div>
+    </div>
+
+    <script>
+        document.getElementById("btnCalcular").addEventListener("click", function () {
+            const valorPacote = Number(document.getElementById("pacote").value);
+            const pessoas     = Number(document.getElementById("pessoas").value);
+            const resumo      = document.getElementById("resumo");
+
+            if (!pessoas || pessoas <= 0) {
+                resumo.innerHTML = "<p style='color:red'>Informe uma quantidade válida de pessoas.</p>";
+                return;
+            }
+
+            const custoBruto    = valorPacote * pessoas;
+            const taxaServico   = custoBruto * 0.10;
+            const subtotal      = custoBruto + taxaServico;
+
+            let desconto      = 0;
+            let descontoTexto = "";
+
+            if (pessoas > 100) {
+                desconto      = subtotal * 0.05;
+                descontoTexto = `<p class="desconto"><strong>Desconto fidelidade (5%):</strong> -R$ ${desconto.toFixed(2)}</p>`;
+            }
+
+            const totalFinal = subtotal - desconto;
+
+            resumo.innerHTML = `
+                <p><strong>Custo bruto:</strong> R$ ${custoBruto.toFixed(2)}</p>
+                <p><strong>Taxa de serviço (10%):</strong> R$ ${taxaServico.toFixed(2)}</p>
+                ${descontoTexto}
+                <p class="destaque">Total final: R$ ${totalFinal.toFixed(2)}</p>
+            `;
+        });
+    </script>
+</body>
+</html>

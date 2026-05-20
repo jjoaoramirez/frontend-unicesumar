@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Médias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .app {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 80%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 8px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #555;
+            color: #fff;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        #resultado {
+            margin-top: 15px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .aprovado { color: blue; }
+        .exame    { color: green; }
+        .reprovado { color: red; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <h2>Calculadora de Médias</h2>
+        <input type="text" id="inputNome" placeholder="Nome do aluno">
+        <input type="number" id="nota1" placeholder="Nota 1" min="0" max="10" step="0.1">
+        <input type="number" id="nota2" placeholder="Nota 2" min="0" max="10" step="0.1">
+        <input type="number" id="nota3" placeholder="Nota 3" min="0" max="10" step="0.1">
+        <br>
+        <button id="btnCalcular">Calcular</button>
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        document.getElementById("btnCalcular").addEventListener("click", function () {
+            const nome   = document.getElementById("inputNome").value.trim();
+            const n1     = Number(document.getElementById("nota1").value);
+            const n2     = Number(document.getElementById("nota2").value);
+            const n3     = Number(document.getElementById("nota3").value);
+            const res    = document.getElementById("resultado");
+
+            if (!nome) { res.textContent = "Informe o nome do aluno."; res.className = "reprovado"; return; }
+
+            const media = ((n1 + n2 + n3) / 3).toFixed(2);
+            let msg = `<p>${nome} — Média: ${media}</p>`;
+
+            if (media >= 7.0) {
+                msg += `<p class="aprovado">✔ Aprovado</p>`;
+                res.className = "";
+                res.innerHTML = msg;
+            } else if (media >= 4.0) {
+                const falta = (10 - media).toFixed(2);
+                msg += `<p class="exame">⚠ Exame Final — faltam ${falta} pontos para 10</p>`;
+                res.className = "";
+                res.innerHTML = msg;
+            } else {
+                msg += `<p class="reprovado">✘ Reprovado</p>`;
+                res.className = "";
+                res.innerHTML = msg;
+            }
+        });
+    </script>
+</body>
+</html>

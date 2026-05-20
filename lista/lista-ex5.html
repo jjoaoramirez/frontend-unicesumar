@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity Bank – Lista VIP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px 0;
+            box-sizing: border-box;
+        }
+
+        .app {
+            text-align: center;
+            max-width: 480px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .input-row input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+
+        .input-row button {
+            padding: 8px 14px;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #555;
+            color: #fff;
+        }
+
+        .input-row button:hover { background-color: #333; }
+
+        #listaVIP {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        #listaVIP li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+            gap: 6px;
+        }
+
+        #listaVIP li:last-child { border-bottom: none; }
+
+        .nome-convidado {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .nome-convidado.riscado {
+            text-decoration: line-through;
+            color: #aaa;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 5px;
+        }
+
+        .acoes button {
+            padding: 4px 10px;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        .btn-concluir  { background-color: #4caf50; }
+        .btn-editar    { background-color: #2196f3; }
+        .btn-excluir   { background-color: #f44336; }
+
+        .btn-concluir:hover { background-color: #388e3c; }
+        .btn-editar:hover   { background-color: #1565c0; }
+        .btn-excluir:hover  { background-color: #c62828; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <h2>Infinity Bank</h2>
+        <h3 style="margin-top:0;color:#555;">Lista de Convidados VIP</h3>
+
+        <div class="input-row">
+            <input type="text" id="inputNome" placeholder="Nome do convidado">
+            <button id="btnAdicionar">Adicionar</button>
+        </div>
+
+        <ul id="listaVIP"></ul>
+    </div>
+
+    <script>
+        document.getElementById("btnAdicionar").addEventListener("click", adicionarConvidado);
+        document.getElementById("inputNome").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") adicionarConvidado();
+        });
+
+        function adicionarConvidado() {
+            const input = document.getElementById("inputNome");
+            const nome  = input.value.trim();
+            if (!nome) return;
+
+            const lista = document.getElementById("listaVIP");
+            const li    = document.createElement("li");
+
+            const spanNome = document.createElement("span");
+            spanNome.textContent = nome;
+            spanNome.classList.add("nome-convidado");
+
+            const divAcoes = document.createElement("div");
+            divAcoes.classList.add("acoes");
+
+            const btnConcluir = document.createElement("button");
+            btnConcluir.textContent = "Concluir";
+            btnConcluir.classList.add("btn-concluir");
+            btnConcluir.addEventListener("click", function () {
+                spanNome.classList.toggle("riscado");
+            });
+
+            const btnEditar = document.createElement("button");
+            btnEditar.textContent = "Editar";
+            btnEditar.classList.add("btn-editar");
+            btnEditar.addEventListener("click", function () {
+                const novoNome = prompt("Novo nome:", spanNome.textContent);
+                if (novoNome && novoNome.trim()) {
+                    spanNome.textContent = novoNome.trim();
+                }
+            });
+
+            const btnExcluir = document.createElement("button");
+            btnExcluir.textContent = "Excluir";
+            btnExcluir.classList.add("btn-excluir");
+            btnExcluir.addEventListener("click", function () {
+                lista.removeChild(li);
+            });
+
+            divAcoes.appendChild(btnConcluir);
+            divAcoes.appendChild(btnEditar);
+            divAcoes.appendChild(btnExcluir);
+
+            li.appendChild(spanNome);
+            li.appendChild(divAcoes);
+            lista.appendChild(li);
+
+            input.value = "";
+            input.focus();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity Bank – Simulador de Vendas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .app {
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        select, input {
+            width: 80%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 8px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #555;
+            color: #fff;
+        }
+
+        button:hover { background-color: #333; }
+
+        #resumo {
+            margin-top: 15px;
+            text-align: left;
+            font-size: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+        }
+
+        #resumo p { margin: 6px 0; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <h2>Infinity Bank</h2>
+        <h3 style="margin-top:0;color:#555;">Simulador de Vendas</h3>
+
+        <select id="bandeira">
+            <option value="visa">Visa</option>
+            <option value="master">Mastercard</option>
+            <option value="elo">Elo</option>
+        </select>
+
+        <input type="number" id="valor" placeholder="Valor da compra (R$)" min="0" step="0.01">
+
+        <select id="parcelas">
+            <option value="1">1x</option>
+            <option value="2">2x</option>
+            <option value="3">3x</option>
+            <option value="4">4x</option>
+            <option value="5">5x</option>
+            <option value="6">6x</option>
+            <option value="12">12x</option>
+        </select>
+
+        <br>
+        <button id="btnCalcular">Calcular</button>
+
+        <div id="resumo"></div>
+    </div>
+
+    <script>
+        document.getElementById("btnCalcular").addEventListener("click", function () {
+            const bandeira = document.getElementById("bandeira").value;
+            const valor    = Number(document.getElementById("valor").value);
+            const parcelas = Number(document.getElementById("parcelas").value);
+            const resumo   = document.getElementById("resumo");
+
+            if (!valor || valor <= 0) {
+                resumo.innerHTML = "<p style='color:red'>Informe um valor válido.</p>";
+                return;
+            }
+
+            let taxaBandeira = 0;
+            switch (bandeira) {
+                case "visa":   taxaBandeira = 0.02;   break;
+                case "master": taxaBandeira = 0.0185; break;
+                case "elo":    taxaBandeira = 0.03;   break;
+            }
+
+            const taxaMensal      = 12.50;
+            const jurosMes        = 0.0035;
+
+            const valorTaxa       = valor * taxaBandeira;
+            const valorJuros      = valor * jurosMes * parcelas;
+            const taxasMensais    = taxaMensal * parcelas;
+            const totalFinal      = valor + valorTaxa + valorJuros + taxasMensais;
+            const valorParcela    = totalFinal / parcelas;
+
+            resumo.innerHTML = `
+                <p><strong>Valor original:</strong> R$ ${valor.toFixed(2)}</p>
+                <p><strong>Taxa da bandeira (${(taxaBandeira * 100).toFixed(2)}%):</strong> R$ ${valorTaxa.toFixed(2)}</p>
+                <p><strong>Juros (0,35% × ${parcelas}x):</strong> R$ ${valorJuros.toFixed(2)}</p>
+                <p><strong>Taxa mensal (R$ 12,50 × ${parcelas}x):</strong> R$ ${taxasMensais.toFixed(2)}</p>
+                <p><strong>Total final:</strong> R$ ${totalFinal.toFixed(2)}</p>
+                <p><strong>Valor de cada parcela:</strong> R$ ${valorParcela.toFixed(2)}</p>
+            `;
+        });
+    </script>
+</body>
+</html>

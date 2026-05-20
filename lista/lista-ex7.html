@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisador de Cartão de Crédito</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .app {
+            text-align: center;
+            max-width: 440px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 80%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 8px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #555;
+            color: #fff;
+        }
+
+        button:hover { background-color: #333; }
+
+        #painel {
+            margin-top: 15px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+            font-size: 15px;
+        }
+
+        #painel p { margin: 7px 0; }
+
+        .valido   { color: green; font-weight: bold; }
+        .invalido { color: red;   font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <h2>Analisador de Cartão</h2>
+
+        <input type="text" id="inputCartao" placeholder="Número do cartão" maxlength="19">
+        <br>
+        <button id="btnAnalisar">Analisar Cartão</button>
+
+        <div id="painel"></div>
+    </div>
+
+    <script>
+        document.getElementById("btnAnalisar").addEventListener("click", analisarCartao);
+
+        function luhn(numero) {
+            const digits = numero.split("").reverse().map(Number);
+            let soma = 0;
+            for (let i = 0; i < digits.length; i++) {
+                let d = digits[i];
+                if (i % 2 === 1) {
+                    d *= 2;
+                    if (d > 9) d -= 9;
+                }
+                soma += d;
+            }
+            return soma % 10 === 0;
+        }
+
+        function detectarBandeira(numero) {
+            if (/^4/.test(numero))                          return "Visa";
+            if (/^5[1-5]/.test(numero))                     return "Mastercard";
+            if (/^3[47]/.test(numero))                      return "American Express";
+            if (/^6(?:011|5)/.test(numero))                 return "Discover";
+            if (/^(?:636368|438935|504175|636297)/.test(numero)) return "Elo";
+            if (/^35/.test(numero))                         return "JCB";
+            return "Desconhecida";
+        }
+
+        function detectarSetor(primeiro) {
+            const d = parseInt(primeiro);
+            if (d === 1 || d === 2) return "Companhias Aéreas / Transporte";
+            if (d === 3)            return "Viagens e Entretenimento";
+            if (d === 4 || d === 5) return "Bancário e Financeiro";
+            if (d === 6)            return "Merchandising e Bancário";
+            if (d === 7)            return "Petróleo e Combustíveis";
+            if (d === 8)            return "Telecomunicações";
+            if (d === 9)            return "Governo e Nacional";
+            return "Desconhecido";
+        }
+
+        function detectarBanco(numero) {
+            if (numero.startsWith("4111")) return "Chase Bank (teste)";
+            if (numero.startsWith("4532")) return "Visa — Banco Santander";
+            if (numero.startsWith("5500")) return "Mastercard — Banco do Brasil";
+            if (numero.startsWith("5412")) return "Mastercard — Citibank";
+            if (numero.startsWith("3714")) return "American Express — Bradesco";
+            if (numero.startsWith("6011")) return "Discover Bank";
+            return "Banco Emissor Não Identificado";
+        }
+
+        function analisarCartao() {
+            const raw    = document.getElementById("inputCartao").value.replace(/[\s.]/g, "");
+            const painel = document.getElementById("painel");
+
+            if (raw.length < 13 || raw.length > 16 || !/^\d+$/.test(raw)) {
+                painel.innerHTML = `<p class="invalido">Número inválido. Insira entre 13 e 16 dígitos.</p>`;
+                return;
+            }
+
+            const valido   = luhn(raw);
+            const bandeira = detectarBandeira(raw);
+            const setor    = detectarSetor(raw[0]);
+            const banco    = detectarBanco(raw);
+
+            painel.innerHTML = `
+                <p><strong>Status:</strong> <span class="${valido ? "valido" : "invalido"}">${valido ? "✔ Válido" : "✘ Inválido"}</span></p>
+                <p><strong>Bandeira:</strong> ${bandeira}</p>
+                <p><strong>Categoria de Setor:</strong> ${setor}</p>
+                <p><strong>Banco Emissor:</strong> ${banco}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
